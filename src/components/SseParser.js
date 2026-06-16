@@ -4,6 +4,8 @@ const RESULT_PREFIX = 'Agent结果:'
 export function createSseConnection(url, options = {}) {
   const {
     chatId = '',
+    method = 'GET',
+    body = null,
     onThink = () => {},
     onResult = () => {},
     onError = () => {},
@@ -15,11 +17,18 @@ export function createSseConnection(url, options = {}) {
 
   const controller = new AbortController()
 
+  const headers = {
+    'authorization': token || '',
+    'chatId': chatId
+  }
+  if (body) {
+    headers['Content-Type'] = 'text/plain;charset=UTF-8'
+  }
+
   fetch(url, {
-    headers: {
-      'authorization': token || '',
-      'chatId': chatId
-    },
+    method,
+    headers,
+    body,
     signal: controller.signal
   }).then(async response => {
     if (!response.ok) {

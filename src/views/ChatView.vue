@@ -60,7 +60,7 @@ import { useRouter } from 'vue-router'
 import { Plus, Clock, User, ChatLineSquare, SwitchButton } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
-import { uploadFileApi } from '@/api/chat'
+import { uploadFileApi, getChatSseUrl } from '@/api/chat'
 import { createSseConnection } from '@/components/SseParser'
 import ChatMessage from '@/components/ChatMessage.vue'
 import ChatInput from '@/components/ChatInput.vue'
@@ -103,10 +103,11 @@ async function handleSend({ text, file }) {
   chatStore.isStreaming = true
   scrollToBottom()
 
-  const encodedMsg = encodeURIComponent(text)
-  const url = `/ai/chat/${encodedMsg}`
+  const url = getChatSseUrl()
 
   sseConnection = createSseConnection(url, {
+    method: 'POST',
+    body: text,
     chatId: chatStore.chatId,
     onThink(data) {
       chatStore.updateLastThink(data)

@@ -19,3 +19,7 @@ export function getHistoryMessagesApi(chatId) {
 export function deleteHistoryApi(chatId) {
   return request.delete(`/chat/history/remove/${chatId}`)
 }
+
+export function getChatSseUrl() {
+  return '/ai/chat'
+}
