@@ -4,7 +4,7 @@ const RESULT_PREFIX = 'Agent结果:'
 export function createSseConnection(url, options = {}) {
   const {
     chatId = '',
-    method = 'GET',
+    method = 'POST',
     body = null,
     onThink = () => {},
     onResult = () => {},
@@ -19,7 +19,8 @@ export function createSseConnection(url, options = {}) {
 
   const headers = {
     'authorization': token || '',
-    'chatId': chatId
+    'chatId': chatId,
+    'Accept': 'text/event-stream' 
   }
   if (body) {
     headers['Content-Type'] = 'text/plain;charset=UTF-8'
